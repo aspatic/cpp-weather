@@ -76,7 +76,7 @@ void CrtSurfData(){
     for (int i=0;i<vstcode.size();i++){
         
         // 用随机数填充分钟观测数据的结构体
-      st_surfdata stsurfdata;
+        struct st_surfdata stsurfdata;
         
         memset(&stsurfdata,0,sizeof(stsurfdata));
         strncpy(stsurfdata.obtid, vstcode[i].obtId, 10); // 站点代码。
@@ -92,7 +92,6 @@ void CrtSurfData(){
         // 把观测数据的结构体放入vsurfdata容器。
         vsurfdata.push_back(stsurfdata);        
     }
-        printf("Do something, just don't return.");
 }
 
 int main(int argc, char* argv[]){
