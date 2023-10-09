@@ -73,11 +73,11 @@ void CrtSurfData(){
     char strddatetime[21];
     memset(strddatetime,0,sizeof(strddatetime)); //填0初始化
     LocalTime(strddatetime,"yyyymmddhh24miss");
-    
     for (int i=0;i<vstcode.size();i++){
         
         // 用随机数填充分钟观测数据的结构体
-        struct st_surfdata stsurfdata;
+      st_surfdata stsurfdata;
+        
         memset(&stsurfdata,0,sizeof(stsurfdata));
         strncpy(stsurfdata.obtid, vstcode[i].obtId, 10); // 站点代码。
         strncpy(stsurfdata.ddatetime,strddatetime,14); // 当前时间：格式yyyymmddhh24miss
@@ -90,8 +90,9 @@ void CrtSurfData(){
         stsurfdata.vis=rand()%5001+100000;  // 能见度：0.1米
 
         // 把观测数据的结构体放入vsurfdata容器。
-        vsurfdata.push_back(stsurfdata);
+        vsurfdata.push_back(stsurfdata);        
     }
+        printf("Do something, just don't return.");
 }
 
 int main(int argc, char* argv[]){
