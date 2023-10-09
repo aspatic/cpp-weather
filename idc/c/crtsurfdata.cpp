@@ -1,8 +1,9 @@
 #include "_public.h"
 
 
+CLogFile logfile;
 
-struct st_stcode{
+struct st_stcode{// 全国气象站点参数结构体。
     char provName[31]; // 省 
     char obtId[11]; // 站号
     char obtName[31]; // 站名
@@ -11,7 +12,6 @@ struct st_stcode{
     double height; // 高度
 };
 
-CLogFile logfile;
 std::vector<struct st_stcode> vstcode;
 
 bool LoadSTCode(const char* inifile){
@@ -51,9 +51,53 @@ bool LoadSTCode(const char* inifile){
     return true;
 }
 
+struct st_surfdata{// 全国气象站点分钟观测数据结构
+    char obtid[11];      // 站点代码。
+    char ddatetime[21];  // 数据时间：格式yyyymmddhh24miss
+    int  t;              // 气温：单位，0.1摄氏度。
+    int  p;              // 气压：0.1百帕。
+    int  u;              // 相对湿度，0-100之间的值。
+    int  wd;             // 风向，0-360之间的值。
+    int  wf;             // 风速：单位0.1m/s
+    int  r;              // 降雨量：0.1mm。
+    int  vis;            // 能见度：0.1米。
+};
+
+vector<struct st_surfdata> vsurfdata;
+
+void CrtSurfData(){
+    // 模拟生成全国气象站点分钟观测数据，存放在vsurfdata容器中。
+    srand(time(0));
+
+    // 获取当前时间，当作观测时间。
+    char strddatetime[21];
+    memset(strddatetime,0,sizeof(strddatetime)); //填0初始化
+    LocalTime(strddatetime,"yyyymmddhh24miss");
+    
+    for (int i=0;i<vstcode.size();i++){
+        
+        // 用随机数填充分钟观测数据的结构体
+        struct st_surfdata stsurfdata;
+        memset(&stsurfdata,0,sizeof(stsurfdata));
+        strncpy(stsurfdata.obtid, vstcode[i].obtId, 10); // 站点代码。
+        strncpy(stsurfdata.ddatetime,strddatetime,14); // 当前时间：格式yyyymmddhh24miss
+        stsurfdata.t=rand()%351;       // 气温：单位，0.1摄氏度
+        stsurfdata.p=rand()%265+10000; // 气压：0.1百帕
+        stsurfdata.u=rand()%100+1;     // 相对湿度，0-100之间的值。
+        stsurfdata.wd=rand()%360;      // 风向，0-360之间的值。
+        stsurfdata.wf=rand()%150;      // 风速：单位0.1m/s
+        stsurfdata.r=rand()%16;        // 降雨量：0.1mm
+        stsurfdata.vis=rand()%5001+100000;  // 能见度：0.1米
+
+        // 把观测数据的结构体放入vsurfdata容器。
+        vsurfdata.push_back(stsurfdata);
+    }
+}
 
 int main(int argc, char* argv[]){
     if (argc!=4){
+        // 如果参数非法，给出帮助文档。
+
         printf("Using:/crtsurfdata inifile outpath logfile\n");
         printf("Example:/home/yche/cpp-weather/idc/bin/crtsurfdata /home/yche/cpp-weather/idc/ini/stcode.ini /tmp/surfdata /log/idc/crtsurfdata.log\n\n");
         printf("inifile 全国气象站点参数文件名。\n");
@@ -62,7 +106,8 @@ int main(int argc, char* argv[]){
 
         return -1;
     }
-    
+
+    // 打开程序的日志文件。
     if (logfile.Open(argv[3])==false){
         printf("logfile.Open(%s) failed.\n",argv[3]); 
         return -1;
@@ -73,6 +118,9 @@ int main(int argc, char* argv[]){
     if(LoadSTCode(argv[1])==0){
         return -1;
     }
+
+    CrtSurfData(); // 模拟生成全国气象站点分钟观测数据，存放在vsurfdata容器中。
+
 
     logfile.WriteEx("crtsurfdata2 运行结束。\n");
 
