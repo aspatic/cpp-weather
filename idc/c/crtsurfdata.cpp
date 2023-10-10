@@ -86,8 +86,11 @@ bool CrtSurfFile(const char* outpath, const char* datafmt){
     if (strcmp(datafmt, "csv")==0){
         File.Fprintf("站点代码,数据时间,气温,气压,相对湿度,风向,风速,降雨量,能见度\n");
     }
-    if (strcmp(datafmt, "csv")==0){
+    if (strcmp(datafmt, "xml")==0){
         File.Fprintf("<data>\n");
+    }
+    if (strcmp(datafmt, "json")==0){
+        File.Fprintf("{\"data\":[\n");
     }
 
     // 写入每条数据
@@ -99,7 +102,7 @@ bool CrtSurfFile(const char* outpath, const char* datafmt){
             vsurfdata[i].u,vsurfdata[i].wd,vsurfdata[i].wf/10.0,vsurfdata[i].r/10.0,vsurfdata[i].vis/10.0);
         }
         if (strcmp(datafmt, "xml")==0){
-            // cxml format
+            // xml format
             File.Fprintf("<obtid>%s</obtid>"\
                         "<ddatetime>%s</ddatetime>"\
                         "<t>%.1f</t>"\
@@ -113,10 +116,30 @@ bool CrtSurfFile(const char* outpath, const char* datafmt){
             vsurfdata[i].obtid,vsurfdata[i].ddatetime,vsurfdata[i].t/10.0,vsurfdata[i].p/10.0,\
             vsurfdata[i].u,vsurfdata[i].wd,vsurfdata[i].wf/10.0,vsurfdata[i].r/10.0,vsurfdata[i].vis/10.0);
         }
+        if (strcmp(datafmt, "json")==0){
+            // json format
+            File.Fprintf("{\"obtid\":\"%s\","\
+                        "\"ddatetime\":\"%s\","\
+                        "\"t\":\"%.1f\","\
+                        "\"p\":\"%.1f\","\
+                        "\"u\":\"%d\","\
+                        "\"wd\":\"%d\","\
+                        "\"wf\":\"%.1f\","\
+                        "\"r\":\"%.1f\","\
+                        "\"vis\":\"%.1f\""\
+                        "}",
+            vsurfdata[i].obtid,vsurfdata[i].ddatetime,vsurfdata[i].t/10.0,vsurfdata[i].p/10.0,vsurfdata[i].u,vsurfdata[i].wd,vsurfdata[i].wf/10.0,vsurfdata[i].r/10.0,vsurfdata[i].vis/10.0);
+            if (i < vsurfdata.size() - 1){
+                File.Fprintf(",\n");
+            }else{
+                File.Fprintf("\n");
+            }
+        }
     }
+    
     // 文件的结束标签
     if (strcmp(datafmt,"xml")==0) File.Fprintf("</data>\n");
-
+    if (strcmp(datafmt,"json")==0) File.Fprintf("]}\n");    
     //sleep(50);
     // 关闭文件。(结束写入，并将临时文件复制到目标文件)
     File.CloseAndRename();
