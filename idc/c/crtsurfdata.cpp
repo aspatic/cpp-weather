@@ -97,7 +97,7 @@ bool CrtSurfFile(const char* outpath, const char* datafmt){
         }
     }
 
-    sleep(50);
+    //sleep(50);
     // 关闭文件。(结束写入，并将临时文件复制到目标文件)
     File.CloseAndRename();
     
