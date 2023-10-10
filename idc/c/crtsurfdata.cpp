@@ -31,7 +31,6 @@ void CrtSurfData();
 
 bool CrtSurfFile(const char* outpath, const char* datafmt);
 
-
 int main(int argc, char* argv[]){
     if (argc!=5){
         // 如果参数非法，给出帮助文档。
@@ -59,6 +58,7 @@ int main(int argc, char* argv[]){
 
     CrtSurfData(); // 模拟生成全国气象站点分钟观测数据，存放在vsurfdata容器中。
 
+    // 如果给出文件格式就生成这种文件，如果三种同时给出，则三份不同格式文件都生成
     if (strstr(argv[4], "xml")){ CrtSurfFile(argv[2],"xml");}
     if (strstr(argv[4], "json")){ CrtSurfFile(argv[2],"json");}
     if (strstr(argv[4], "csv")){ CrtSurfFile(argv[2],"csv");}
@@ -88,7 +88,19 @@ bool CrtSurfFile(const char* outpath, const char* datafmt){
     }
 
     // 写入每条数据
-
+    for (int i = 0; i < vsurfdata.size(); i++){
+        if (strcmp(datafmt, "csv")==0){
+            // csv format
+            File.Fprintf("%s,%s,%.1f,%.1f,%d,%d,%.1f,%.1f,%.1f\n",\
+            vsurfdata[i].obtid,vsurfdata[i].ddatetime,vsurfdata[i].t/10.0,vsurfdata[i].p/10.0,\
+            vsurfdata[i].u,vsurfdata[i].wd,vsurfdata[i].wf/10.0,vsurfdata[i].r/10.0,vsurfdata[i].vis/10.0);
+        }
+    }
+    // 关闭文件。(结束写入，并将临时文件复制到目标文件)
+    File.CloseAndRename();
+    
+    logfile.Write("生成数据文件%s成功，数据时间%s，记录数%d。\n",strFileName,strddatetime,vsurfdata.size());
+    return true;
 }
 
 void CrtSurfData(){
