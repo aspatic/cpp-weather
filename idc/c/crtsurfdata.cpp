@@ -103,30 +103,30 @@ bool CrtSurfFile(const char* outpath, const char* datafmt){
         }
         if (strcmp(datafmt, "xml")==0){
             // xml format
-            File.Fprintf("<obtid>%s</obtid>"\
-                        "<ddatetime>%s</ddatetime>"\
-                        "<t>%.1f</t>"\
-                        "<p>%.1f</p>"\
-                        "<u>%d</u>"\
-                        "<wd>%d</wd>"\
-                        "<wf>%.1f</wf>"\
-                        "<r>%.1f</r>"\
-                        "<vis>%.1f</vis>"\
+            File.Fprintf("<obtid>%s</obtid>"
+                        "<ddatetime>%s</ddatetime>"
+                        "<t>%.1f</t>"
+                        "<p>%.1f</p>"
+                        "<u>%d</u>"
+                        "<wd>%d</wd>"
+                        "<wf>%.1f</wf>"
+                        "<r>%.1f</r>"
+                        "<vis>%.1f</vis>"
                         "<endl/>\n",
             vsurfdata[i].obtid,vsurfdata[i].ddatetime,vsurfdata[i].t/10.0,vsurfdata[i].p/10.0,\
             vsurfdata[i].u,vsurfdata[i].wd,vsurfdata[i].wf/10.0,vsurfdata[i].r/10.0,vsurfdata[i].vis/10.0);
         }
         if (strcmp(datafmt, "json")==0){
             // json format
-            File.Fprintf("{\"obtid\":\"%s\","\
-                        "\"ddatetime\":\"%s\","\
-                        "\"t\":\"%.1f\","\
-                        "\"p\":\"%.1f\","\
-                        "\"u\":\"%d\","\
-                        "\"wd\":\"%d\","\
-                        "\"wf\":\"%.1f\","\
-                        "\"r\":\"%.1f\","\
-                        "\"vis\":\"%.1f\""\
+            File.Fprintf("{\"obtid\":\"%s\","
+                        "\"ddatetime\":\"%s\","
+                        "\"t\":\"%.1f\","
+                        "\"p\":\"%.1f\","
+                        "\"u\":\"%d\","
+                        "\"wd\":\"%d\","
+                        "\"wf\":\"%.1f\","
+                        "\"r\":\"%.1f\","
+                        "\"vis\":\"%.1f\""
                         "}",
             vsurfdata[i].obtid,vsurfdata[i].ddatetime,vsurfdata[i].t/10.0,vsurfdata[i].p/10.0,vsurfdata[i].u,vsurfdata[i].wd,vsurfdata[i].wf/10.0,vsurfdata[i].r/10.0,vsurfdata[i].vis/10.0);
             if (i < vsurfdata.size() - 1){
