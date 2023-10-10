@@ -96,6 +96,8 @@ bool CrtSurfFile(const char* outpath, const char* datafmt){
             vsurfdata[i].u,vsurfdata[i].wd,vsurfdata[i].wf/10.0,vsurfdata[i].r/10.0,vsurfdata[i].vis/10.0);
         }
     }
+
+    sleep(50);
     // 关闭文件。(结束写入，并将临时文件复制到目标文件)
     File.CloseAndRename();
     
