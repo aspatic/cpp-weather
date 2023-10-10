@@ -65,7 +65,7 @@ int main(int argc, char* argv[]){
 
 
 
-    logfile.WriteEx("crtsurfdata2 运行结束。\n");
+    logfile.WriteEx("crtsurfdata 运行结束。\n");
 
     return 0;
 }
@@ -86,6 +86,9 @@ bool CrtSurfFile(const char* outpath, const char* datafmt){
     if (strcmp(datafmt, "csv")==0){
         File.Fprintf("站点代码,数据时间,气温,气压,相对湿度,风向,风速,降雨量,能见度\n");
     }
+    if (strcmp(datafmt, "csv")==0){
+        File.Fprintf("<data>\n");
+    }
 
     // 写入每条数据
     for (int i = 0; i < vsurfdata.size(); i++){
@@ -95,7 +98,24 @@ bool CrtSurfFile(const char* outpath, const char* datafmt){
             vsurfdata[i].obtid,vsurfdata[i].ddatetime,vsurfdata[i].t/10.0,vsurfdata[i].p/10.0,\
             vsurfdata[i].u,vsurfdata[i].wd,vsurfdata[i].wf/10.0,vsurfdata[i].r/10.0,vsurfdata[i].vis/10.0);
         }
+        if (strcmp(datafmt, "xml")==0){
+            // cxml format
+            File.Fprintf("<obtid>%s</obtid>"\
+                        "<ddatetime>%s</ddatetime>"\
+                        "<t>%.1f</t>"\
+                        "<p>%.1f</p>"\
+                        "<u>%d</u>"\
+                        "<wd>%d</wd>"\
+                        "<wf>%.1f</wf>"\
+                        "<r>%.1f</r>"\
+                        "<vis>%.1f</vis>"\
+                        "<endl/>\n",
+            vsurfdata[i].obtid,vsurfdata[i].ddatetime,vsurfdata[i].t/10.0,vsurfdata[i].p/10.0,\
+            vsurfdata[i].u,vsurfdata[i].wd,vsurfdata[i].wf/10.0,vsurfdata[i].r/10.0,vsurfdata[i].vis/10.0);
+        }
     }
+    // 文件的结束标签
+    if (strcmp(datafmt,"xml")==0) File.Fprintf("</data>\n");
 
     //sleep(50);
     // 关闭文件。(结束写入，并将临时文件复制到目标文件)
