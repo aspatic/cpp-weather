@@ -4,7 +4,7 @@
 
 // If you don't set signal handler of your own, the system 
 // will use default handler, which is usually teminating the process.
-// That's not what we want,=
+// That's not what we want.
 void sigHandler(int sig){
     // echo signal handling 
     printf("接收到了%d信号。\n",sig);
