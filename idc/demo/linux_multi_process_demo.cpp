@@ -3,6 +3,9 @@
 #include <unistd.h>
 #include <signal.h>
 
+#include <sys/types.h>
+#include <sys/wait.h>
+
 // 子进程是父进程的副本
 // 子进程获得了一份父进程的数据空间，队和栈的副本，不是同一个文件的共享
 // 父进程中打开的文件描述符也复制了一份给子进程，可能会导致之前的缓冲内容被两个进程各写入一遍
@@ -18,7 +21,7 @@
 int main(){
     //////////////////////////////////////////////
     // 防止子进程变成僵尸的方法一：设置忽略SIGCHLD信号
-    signal(SIGCHLD,SIG_IGN);
+    //signal(SIGCHLD,SIG_IGN);
     //////////////////////////////////////////////
     int pid = fork();
     if (pid==0){
@@ -27,6 +30,11 @@ int main(){
     }
     else if (pid > 0){
         printf("This is the parent process #%d running.\n",getpid());
+        //////////////////////////////////////////////
+        // 防止子进程变成僵尸的方法二：阻塞父进程，等得子进程退出
+        int status;
+        pid = wait(&status);
+        //////////////////////////////////////////////
         sleep(10);
     }
     else{
