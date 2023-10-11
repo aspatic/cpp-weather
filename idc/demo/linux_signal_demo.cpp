@@ -20,6 +20,8 @@ int main(){
     // You can also overwrite previous handler settings
     signal(15,SIG_IGN);
     signal(13,SIG_DFL);
+    // SIG=9 cannot be ignored either, the following code won't work
+    signal(9,SIG_IGN);
 
     while(1){
         printf("执行了一次任务。\n");
