@@ -22,6 +22,8 @@ int main(){
     signal(13,SIG_DFL);
     // SIG=9 cannot be ignored either, the following code won't work
     signal(9,SIG_IGN);
+    //alram signal handler
+    signal(14,SIG_DFL);
 
     while(1){
         printf("执行了一次任务。\n");
