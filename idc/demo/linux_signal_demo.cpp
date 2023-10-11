@@ -10,6 +10,12 @@ void sigHandler(int sig){
     printf("接收到了%d信号。\n",sig);
 }
 
+void alarmHandler(int num){
+    // echo signal handling 
+    printf("接收到了时钟信号%d。\n",num);
+    alarm(3);
+}
+
 int main(){
 
     //setting system signal handler
@@ -22,9 +28,12 @@ int main(){
     signal(13,SIG_DFL);
     // SIG=9 cannot be ignored either, the following code won't work
     signal(9,SIG_IGN);
+    
     //alram signal handler
     signal(14,SIG_DFL);
+    signal(SIGALRM, alarmHandler);
 
+    alarm(3);
     while(1){
         printf("执行了一次任务。\n");
         sleep(1);
