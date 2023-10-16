@@ -5,13 +5,18 @@
 #include <sys/wait.h>
 
 int main(int argc, char* argv[]){
+    if (argc < 3){
+        printf("Using: ./procctl timetvl program argv ...\n");
+        printf("Example: ./procctl 5 /bin/ls -lt /tmp/weather/\n");
 
-    // 用fork创建一个子进程，在子进程中调用execl执行新的程序
-    // 只有子进程会被新程序替换，父进程只需要等待子进程结束
-    // 这样实现程序调用的功能
-    
-    // Sample of function calls:
-    // ./procctl 5 /bin/ls -lt /tmp/weather/
+        printf("本程序是服务程序的调度程序，周期性地启动程序或shell脚本。\n");
+        printf("timetvl 运行周期， 单位：秒 被调度的程序运行结束后在间隔timetvl秒后会被procctl重新启动。\n");
+        printf("program 被调度的程序名，必须使用全路径。\n");
+        printf("argv ... 被调度的程序的参数。\n");
+        printf("注意，本程序不会被kill杀死，但可以被kill -9强行杀死。\n\n\n");
+    }
+
+    // TODO： 服务程序关闭不必要的信号 其实全都不必要
 
     char* pargv[argc];
     for (int i = 2; i < argc; i++){
