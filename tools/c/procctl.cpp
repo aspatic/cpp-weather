@@ -16,7 +16,11 @@ int main(int argc, char* argv[]){
         printf("注意，本程序不会被kill杀死，但可以被kill -9强行杀死。\n\n\n");
     }
 
-    // TODO： 服务程序关闭不必要的信号 其实全都不必要
+    // 关闭信号和IO，本程序是后台调度，不希望被打扰
+    for (int j=0; j<64; j++){
+        signal(j, SIG_IGN);
+        close(j);
+    }
 
     char* pargv[argc];
     for (int i = 2; i < argc; i++){
