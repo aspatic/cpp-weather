@@ -1,5 +1,7 @@
 #include "_public.h"
 
+CSEM sem; // sephamore obj for shared memory
+
 struct st_pid{
     int pid; // pid
     char name[51]; //process name
@@ -14,6 +16,8 @@ int main(int argc, char* argv[]){
         printf("shmget(0x5005) failed\n");
         return -1;
     }
+    // If the sephamore has exist, get access to it, else create and init it to "value"
+    sem.init(0x5005)==false //sephamore key 0x5005 is different than share memory key 0x5005
 
     // data structure in the shared memory segment
     struct st_pid *stpid = 0;
