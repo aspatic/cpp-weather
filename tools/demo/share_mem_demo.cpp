@@ -1,6 +1,6 @@
 #include "_public.h"
 
-CSEM sem; // sephamore obj for shared memory
+CSEM sem; // semaphore obj for shared memory
 
 struct st_pid{
     int pid; // pid
@@ -17,8 +17,8 @@ int main(int argc, char* argv[]){
         return -1;
     }
 
-    // If the sephamore has exist, get access to it, else create and init it to "value"
-    if(sem.init(0x5005)==false){ //sephamore key 0x5005 is different than share memory key 0x5005
+    // If the semaphore has exist, get access to it, else create and init it to "value"
+    if(sem.init(0x5005)==false){ // semaphore key 0x5005 is different than share memory key 0x5005
         printf("sem.init(0x5005) failed\n");
         return -1;
     }
