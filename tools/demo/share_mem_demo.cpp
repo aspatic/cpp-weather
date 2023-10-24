@@ -52,7 +52,7 @@ int main(int argc, char* argv[]){
     printf("after releasing lock 2, time=%d, val=%d\n", time(0), sem.value());
 
     //printf("before releasing lock 3, time=%d, val=%d\n", time(0), sem.value());
-    sem.V(2);
+    sem.V(20);
     printf("after releasing lock 3, time=%d, val=%d\n", time(0), sem.value());
 
 
