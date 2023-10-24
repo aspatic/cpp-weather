@@ -55,35 +55,17 @@ int main(int argc, char* argv[]){
     sem.V(20);
     printf("after releasing lock 3, time=%d, val=%d\n", time(0), sem.value());
 
+    // This process must not terminated, or our CSEM implementation will reset semaphore.
+    sleep(100); // So keep this process alive and see will its message be shared to others. 
+    // The choice of CSEM 's m_sem_flg SEM_UNDO is a thoughtful one
+    // 如果信号量用于表示可用资源的数量（不变的），设置为SEM_UNDO更合适。
+    // 如果信号量用于生产消费者模型，设置为0更合适。
+    // 注意，网上查到的关于sem_flg的用法基本上是错的，一定要自己动手多测试。
 
     // detach shared memory from current process
     shmdt(stpid);
     
-    /////////////////////////////////////////////////////////////////
-    // yche@DESKTOP-INS7591:~/cpp-weather/tools/demo$ g++ -g -o book share_mem_demo.cpp -I/home/yche/cpp-weather/public /home/yche/cpp-weather/public/_public.cpp
-    // yche@DESKTOP-INS7591:~/cpp-weather/tools/demo$ ./book aaa
-    // before acquiring lock, time=1697810413, val=1
-    // after acquiring lock, time=1697810413, val=0
-    // pid=4662, name=
-    // pid=4713, name=aaa
-    // before releasing lock, time=1697810418, val=0
-    // after releasing lock, time=1697810418, val=1
-    // yche@DESKTOP-INS7591:~/cpp-weather/tools/demo$ ipcs -s
-    // 
-    // ------ Semaphore Arrays --------
-    // key        semid      owner      perms      nsems     
-    // 0x00005005 0          yche       666        1         
-    // 
-    // yche@DESKTOP-INS7591:~/cpp-weather/tools/demo$ ipcrm sem 0
-    // resource(s) deleted
-    // yche@DESKTOP-INS7591:~/cpp-weather/tools/demo$ ipcs -s
-    // 
-    // ------ Semaphore Arrays --------
-    // key        semid      owner      perms      nsems     
-    // 
-    /////////////////////////////////////////////////////////////////
-
-
+    
     
     return 0;
 }
