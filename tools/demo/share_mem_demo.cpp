@@ -1,6 +1,6 @@
 #include "_public.h"
 
-CSEM sem; // sephamore obj for shared memory
+CSEM sem; // semaphore obj for shared memory
 
 struct st_pid{
     int pid; // pid
@@ -17,8 +17,8 @@ int main(int argc, char* argv[]){
         return -1;
     }
 
-    // If the sephamore has exist, get access to it, else create and init it to "value"
-    if(sem.init(0x5005)==false){ //sephamore key 0x5005 is different than share memory key 0x5005
+    // If the semaphore has exist, get access to it, else create and init it to "value"
+    if(sem.init(0x5005, 10)==false){ //semaphore key 0x5005 is different than share memory key 0x5005
         printf("sem.init(0x5005) failed\n");
         return -1;
     }
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]){
     }
 
     printf("before acquiring lock, time=%d, val=%d\n", time(0), sem.value());
-    sem.P(); // acquire lock 
+    sem.P(-5); // acquire lock 
     printf("after acquiring lock, time=%d, val=%d\n", time(0), sem.value());
 
     printf("pid=%d, name=%s\n", stpid->pid, stpid->name);
@@ -41,11 +41,19 @@ int main(int argc, char* argv[]){
     stpid->pid = getpid();
     strcpy(stpid->name, argv[1]);
     printf("pid=%d, name=%s\n", stpid->pid, stpid->name);
-    sleep(5);
+    sleep(3);
 
     printf("before releasing lock, time=%d, val=%d\n", time(0), sem.value());
-    sem.V();
+    sem.V(2);
     printf("after releasing lock, time=%d, val=%d\n", time(0), sem.value());
+
+    //printf("before releasing lock 2, time=%d, val=%d\n", time(0), sem.value());
+    sem.V(2);
+    printf("after releasing lock 2, time=%d, val=%d\n", time(0), sem.value());
+
+    //printf("before releasing lock 3, time=%d, val=%d\n", time(0), sem.value());
+    sem.V(2);
+    printf("after releasing lock 3, time=%d, val=%d\n", time(0), sem.value());
 
 
     // detach shared memory from current process
