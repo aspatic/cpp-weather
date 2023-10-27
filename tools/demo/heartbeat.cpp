@@ -51,7 +51,7 @@ int main (int argc, char* agrv[]){
     // 如果在不巧的情况下我们这个新进程使用和之前异常退出的进程相同的ID，那就会匹配到共享内存的这条残留记录，导致被新进程守护进程误杀
     
     // 所以当务之急是扫描共享内存中是否有同名ID的残留记录，并尽快覆盖掉它。
-    for (int i = 0; i < SHMKEYP_; i++ ){
+    for (int i = 0; i < MAXNUMP_; i++ ){
         if (m_shm[i].pid = stpinfo.pid){
             m_pos_avail = i;
             break;
@@ -62,7 +62,7 @@ int main (int argc, char* agrv[]){
 
     // 在共享内存查找一个空位置，把当前进程心跳信息存入
     if(m_pos_avail == -1){
-        for (int i = 0; i < SHMKEYP_; i++ ){
+        for (int i = 0; i < MAXNUMP_; i++ ){
             // if m_shm[i].pid == 0 
             if ( (m_shm+i)->pid == 0 ){
                 // 找到了一个空位置
