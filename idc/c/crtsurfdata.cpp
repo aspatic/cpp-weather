@@ -38,6 +38,8 @@ void CrtSurfData();
 
 bool CrtSurfFile(const char* outpath, const char* datafmt);
 
+CFile File; // 提到全局变量 避免程序中止不调用析构函数
+
 // 程序退出和信号2、15的处理函数。
 void EXIT(int sig);
 
@@ -109,7 +111,6 @@ bool CrtSurfFile(const char* outpath, const char* datafmt){
     sprintf(strFileName, 
             "%s/SURF_ZH_%s_%d.%s", outpath, strddatetime, getpid(),datafmt); //加进程id保证无重复
 
-    CFile File;
     // 打开写入目标文件 (创建临时文件)
     if (File.OpenForRename(strFileName,"w") == 0){
         logfile.Write("File.OpenForRename(%s) failed\n", strFileName);
@@ -173,7 +174,7 @@ bool CrtSurfFile(const char* outpath, const char* datafmt){
     // 文件的结束标签
     if (strcmp(datafmt,"xml")==0) File.Fprintf("</data>\n");
     if (strcmp(datafmt,"json")==0) File.Fprintf("]}\n");    
-    sleep(50);
+    // sleep(50);
     // 关闭文件。(结束写入，并将临时文件复制到目标文件)
     File.CloseAndRename();
     UTime(strFileName,strddatetime); // 修改文件的时间属性
