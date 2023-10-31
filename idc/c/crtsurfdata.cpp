@@ -8,6 +8,8 @@
 #include "_public.h"
 
 CLogFile logfile;
+CPActive PActive;   // 进程心跳。
+CFile File; // 提到全局变量 避免程序中止不调用析构函数
 
 char strddatetime[21];
 
@@ -38,7 +40,6 @@ void CrtSurfData();
 
 bool CrtSurfFile(const char* outpath, const char* datafmt);
 
-CFile File; // 提到全局变量 避免程序中止不调用析构函数
 
 // 程序退出和信号2、15的处理函数。
 void EXIT(int sig);
@@ -67,7 +68,8 @@ int main(int argc, char* argv[]){
         return -1;
     }
     
-    logfile.Write("crtsurfdata2 开始运行。\n");
+    logfile.Write("crtsurfdata 开始运行。\n");
+    PActive.AddPInfo(20, "crtsurfdata");//这个程序运行太快了 就不在中途刷新心跳 意思意思得了
 
     if(LoadSTCode(argv[1])==0){
         return -1;
