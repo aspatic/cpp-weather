@@ -84,7 +84,7 @@ int main (int argc, char* agrv[]){
     while(1){
         // “报平安” 更新共享内存中本进程的心跳
         // 理论上讲这是独享的内存段，不会有竞争问题，应该也就不需要加锁
-        if (m_pos == -1) return -1;
+        if (m_pos_avail == -1) return -1;
         m_shm[m_pos_avail].atime = time(0);
 
         sleep(10);
@@ -92,7 +92,7 @@ int main (int argc, char* agrv[]){
 
     // 释放 当前进程占用的共享内存
     // 敷衍的写法是 m_shm[m_pos_avail].pid = 0;
-    if(m_pos != -1) memset(m_shm + m_pos_avail, 0, sizeof(struct st_pinfo));
+    if(m_pos_avail != -1) memset(m_shm + m_pos_avail, 0, sizeof(struct st_pinfo));
 
     // 把共享内存从当前进程断开
     if (m_shm != 0) shmdt(m_shm);
