@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     while (1)
     {
         Active.UptATime();
-        sleep(10);
+        sleep(100);
     }
     return 0;
 }
