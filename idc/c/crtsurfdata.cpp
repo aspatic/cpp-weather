@@ -1,10 +1,5 @@
 // 本程序用于生成模拟全国气象站观测的分钟数据
 
-// 增加生成历史数据文件的功能，为压缩文件和清理文件准备历史数据文件(Done)
-// 增加系统信号处理函数，处理信号2和15
-// 解决调用EXIT函数退出时局部变量没有调用析构函数的问题
-// 把本程序心跳信息写入共享内存
-
 #include "_public.h"
 
 CLogFile logfile;
@@ -49,7 +44,10 @@ int main(int argc, char* argv[]){
         // 如果参数非法，给出帮助文档。
 
         printf("Using:/crtsurfdata inifile outpath logfile datafmt [datetime]\n");
-        printf("Example:/home/yche/cpp-weather/idc/bin/crtsurfdata /home/yche/cpp-weather/idc/ini/stcode.ini /tmp/surfdata /log/idc/crtsurfdata.log xml,json,csv 20210710123054\n\n");
+        printf("Example:/home/yche/cpp-weather/idc/bin/crtsurfdata /home/yche/cpp-weather/idc/ini/stcode.ini /tmp/surfdata /log/idc/crtsurfdata.log xml,json,csv\n");
+        printf("Or:     /home/yche/cpp-weather/idc/bin/crtsurfdata /home/yche/cpp-weather/idc/ini/stcode.ini /tmp/surfdata /log/idc/crtsurfdata.log xml,json,csv 20210710123054\n\n");
+        printf("Or:     /home/yche/cpp-weather/tools/bin/procctl 60 /home/yche/cpp-weather/idc/bin/crtsurfdata /home/yche/cpp-weather/idc/bin/crtsurfdata /home/yche/cpp-weather/idc/ini/stcode.ini /tmp/surfdata /log/idc/crtsurfdata.log xml,json,csv\n\n\n");
+        
         printf("inifile 全国气象站点参数文件名。\n");
         printf("outpath 全国气象站点数据文件存放的目录。\n");
         printf("logfile 本程序运行的日志文件名。\n\n");
