@@ -8,7 +8,7 @@
 #include "_public.h"
 
 CLogFile logfile;
-// 获取当前时间，当作观测时间。
+
 char strddatetime[21];
 
 struct st_stcode{// 全国气象站点参数结构体。
@@ -39,15 +39,16 @@ void CrtSurfData();
 bool CrtSurfFile(const char* outpath, const char* datafmt);
 
 int main(int argc, char* argv[]){
-    if (argc!=5){
+    if (argc!=5 && argc!=6){ // 可选参数 指定生成的具体时间（历史时间）
         // 如果参数非法，给出帮助文档。
 
-        printf("Using:/crtsurfdata inifile outpath logfile datafmt\n");
-        printf("Example:/home/yche/cpp-weather/idc/bin/crtsurfdata /home/yche/cpp-weather/idc/ini/stcode.ini /tmp/surfdata /log/idc/crtsurfdata.log xml,json,csv\n\n");
+        printf("Using:/crtsurfdata inifile outpath logfile datafmt [datetime]\n");
+        printf("Example:/home/yche/cpp-weather/idc/bin/crtsurfdata /home/yche/cpp-weather/idc/ini/stcode.ini /tmp/surfdata /log/idc/crtsurfdata.log xml,json,csv 20210710123054\n\n");
         printf("inifile 全国气象站点参数文件名。\n");
         printf("outpath 全国气象站点数据文件存放的目录。\n");
         printf("logfile 本程序运行的日志文件名。\n\n");
         printf("datafmt 生成数据文件的保存格式,支持xml,json,csv三种格式,中间用逗号分隔。\n\n");
+        printf("datetime 这是一个可选参数，表示生成指定时间的数据和文件。\n\n\n");
         return -1;
     }
 
@@ -61,6 +62,16 @@ int main(int argc, char* argv[]){
 
     if(LoadSTCode(argv[1])==0){
         return -1;
+    }
+
+    memset(strddatetime, 0, sizeof(strddatetime)); // 填0初始化
+    if (argc == 5)
+    {
+        LocalTime(strddatetime, "yyyymmddhh24miss"); // 获取当前时间，当作观测时间。
+    }
+    else
+    {
+        STRCPY(strddatetime, sizeof(strddatetime), argv[5]);
     }
 
     CrtSurfData(); // 模拟生成全国气象站点分钟观测数据，存放在vsurfdata容器中。
@@ -150,6 +161,7 @@ bool CrtSurfFile(const char* outpath, const char* datafmt){
     //sleep(50);
     // 关闭文件。(结束写入，并将临时文件复制到目标文件)
     File.CloseAndRename();
+    UTime(strFileName,strddatetime); // 修改文件的时间属性
     
     logfile.Write("生成数据文件%s成功，数据时间%s，记录数%d。\n",strFileName,strddatetime,vsurfdata.size());
     return true;
@@ -159,9 +171,6 @@ void CrtSurfData(){
     // 模拟生成全国气象站点分钟观测数据，存放在vsurfdata容器中。
     srand(time(0));
 
-
-    memset(strddatetime,0,sizeof(strddatetime)); //填0初始化
-    LocalTime(strddatetime,"yyyymmddhh24miss");
     for (int i=0;i<vstcode.size();i++){
         
         // 用随机数填充分钟观测数据的结构体
