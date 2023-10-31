@@ -3,6 +3,18 @@
 void EXIT(int sig);
 
 int main(int argc, char* argv[]){
+    // print help messages
+
+    // ignore all IO and sys/signal
+
+    // get file datetime
+
+    // open dir
+
+    // traverse all files in dir
+    while(1){
+        
+    }
     
     return 0;
 }
