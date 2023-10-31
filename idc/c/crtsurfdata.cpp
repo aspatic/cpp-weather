@@ -1,6 +1,6 @@
 // 本程序用于生成模拟全国气象站观测的分钟数据
 
-// 增加生成历史数据文件的功能，为压缩文件和清理文件准备历史数据文件
+// 增加生成历史数据文件的功能，为压缩文件和清理文件准备历史数据文件(Done)
 // 增加系统信号处理函数，处理信号2和15
 // 解决调用EXIT函数退出时局部变量没有调用析构函数的问题
 // 把本程序心跳信息写入共享内存
@@ -38,6 +38,9 @@ void CrtSurfData();
 
 bool CrtSurfFile(const char* outpath, const char* datafmt);
 
+// 程序退出和信号2、15的处理函数。
+void EXIT(int sig);
+
 int main(int argc, char* argv[]){
     if (argc!=5 && argc!=6){ // 可选参数 指定生成的具体时间（历史时间）
         // 如果参数非法，给出帮助文档。
@@ -51,6 +54,10 @@ int main(int argc, char* argv[]){
         printf("datetime 这是一个可选参数，表示生成指定时间的数据和文件。\n\n\n");
         return -1;
     }
+
+    CloseIOAndSignal(true); //这只是关闭已有的IO 和信号 下面的日志是新的IO，只要这行不放在日志后面即可
+    signal(SIGINT, EXIT);
+    signal(SIGTERM, EXIT);
 
     // 打开程序的日志文件。
     if (logfile.Open(argv[3])==false){
@@ -86,6 +93,14 @@ int main(int argc, char* argv[]){
     logfile.WriteEx("crtsurfdata 运行结束。\n");
 
     return 0;
+}
+
+// 程序退出和信号2、15的处理函数。
+void EXIT(int sig)  
+{
+  logfile.Write("程序退出，sig=%d\n\n",sig);
+
+  exit(0);
 }
 
 bool CrtSurfFile(const char* outpath, const char* datafmt){
@@ -158,7 +173,7 @@ bool CrtSurfFile(const char* outpath, const char* datafmt){
     // 文件的结束标签
     if (strcmp(datafmt,"xml")==0) File.Fprintf("</data>\n");
     if (strcmp(datafmt,"json")==0) File.Fprintf("]}\n");    
-    //sleep(50);
+    sleep(50);
     // 关闭文件。(结束写入，并将临时文件复制到目标文件)
     File.CloseAndRename();
     UTime(strFileName,strddatetime); // 修改文件的时间属性
