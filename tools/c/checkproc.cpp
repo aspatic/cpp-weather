@@ -3,11 +3,31 @@
 // 程序运行的日志。
 CLogFile logfile;
 
-int main(int argc, char* argv[]){
+int main(int argc, char *argv[])
+{
     // 程序的帮助。
+    if (argc != 2)
+    {
+        printf("\n");
+        printf("Using:./checkproc logfilename\n");
+
+        printf("Example: /home/yche/cpp-weather/tools/bin/procctl 10 //home/yche/cpp-weather/tools/bin/checkproc /tmp/log/checkproc.log\n\n");
+
+        printf("本程序用于检查后台服务程序是否超时，如果已超时，就终止它。\n");
+        printf("注意：\n");
+        printf("  1）本程序由procctl即调度程序启动，运行周期建议为10秒。\n");
+        printf("  2）为了避免被普通用户误杀，本程序应该用root用户启动。\n");
+        printf("  3）如果要停止本程序，只能用killall -9 终止。\n\n\n");
+
+        return 0;
+    }
 
     // 打开日志文件。
-
+    if (logfile.Open(argv[1], "a+") == false)
+    {
+        printf("logfile.Open(%s) failed.\n", argv[1]);
+        return -1;
+    }
     // 创建/获取共享内存
 
     // 将共享内存连接到当前进程的地址空间。
@@ -29,6 +49,6 @@ int main(int argc, char* argv[]){
     }
 
     // 把共享内存从当前进程中分离。
-    
+
     return 0;
 }
