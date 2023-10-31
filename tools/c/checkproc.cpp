@@ -30,12 +30,25 @@ int main(int argc, char *argv[])
     }
     // 创建/获取共享内存
 
+    // 创建（或获取）共享内存，大小为 MAXNUMP * sizeof(struct st_procinfo)
+    int shmid = 0;
+    if ((shmid = shmget(SHMKEYP, MAXNUMP * sizeof(struct st_procinfo), 0666 | IPC_CREAT)) == -1)
+    {
+        logfile.Write("创建/获取共享内存(%x)失败。\n", SHMKEYP);
+        return false;
+    }
+
     // 将共享内存连接到当前进程的地址空间。
+    struct st_procinfo *shm;
+    shm = (struct st_procinfo*) shmat(shmid, 0, 0);
 
     // 遍历共享内存中全部的记录。
     for (int ii=0;ii<MAXNUMP;ii++){
         // 如果记录的pid==0，表示空记录，continue;
+        if (shm[ii].pid==0) continue;
+
         // 如果记录的pid!=0，表示是服务程序的心跳记录。
+        logfile.Write("ii=%d,pid=%d,pname=%s,timeout=%d,atime=%d\n",ii,shm[ii].pid,shm[ii].pname,shm[ii].timeout,shm[ii].atime);
 
         // 向进程发送信号0，判断它是否还存在，如果不存在，从共享内存中删除该记录，
 
