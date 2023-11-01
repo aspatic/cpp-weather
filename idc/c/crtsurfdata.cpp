@@ -56,7 +56,7 @@ int main(int argc, char* argv[]){
         return -1;
     }
 
-    CloseIOAndSignal(true); //这只是关闭已有的IO 和信号 下面的日志是新的IO，只要这行不放在日志后面即可
+    // CloseIOAndSignal(true); //这只是关闭已有的IO 和信号 下面的日志是新的IO，只要这行不放在日志后面即可
     signal(SIGINT, EXIT);
     signal(SIGTERM, EXIT);
 
