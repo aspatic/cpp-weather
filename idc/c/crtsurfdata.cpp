@@ -46,7 +46,7 @@ int main(int argc, char* argv[]){
         printf("Using:/crtsurfdata inifile outpath logfile datafmt [datetime]\n");
         printf("Example:/home/yche/cpp-weather/idc/bin/crtsurfdata /home/yche/cpp-weather/idc/ini/stcode.ini /tmp/surfdata /log/idc/crtsurfdata.log xml,json,csv\n");
         printf("Or:     /home/yche/cpp-weather/idc/bin/crtsurfdata /home/yche/cpp-weather/idc/ini/stcode.ini /tmp/surfdata /log/idc/crtsurfdata.log xml,json,csv 20210710123054\n\n");
-        printf("Or:     /home/yche/cpp-weather/tools/bin/procctl 60 /home/yche/cpp-weather/idc/bin/crtsurfdata /home/yche/cpp-weather/idc/bin/crtsurfdata /home/yche/cpp-weather/idc/ini/stcode.ini /tmp/surfdata /log/idc/crtsurfdata.log xml,json,csv\n\n\n");
+        printf("Or:     /home/yche/cpp-weather/tools/bin/procctl 60 /home/yche/cpp-weather/idc/bin/crtsurfdata /home/yche/cpp-weather/idc/ini/stcode.ini /tmp/surfdata /log/idc/crtsurfdata.log xml,json,csv\n\n\n");
         
         printf("inifile 全国气象站点参数文件名。\n");
         printf("outpath 全国气象站点数据文件存放的目录。\n");
