@@ -18,7 +18,7 @@ checkproc:checkproc.cpp
 	
 gzipfiles: gzipfiles.cpp
 	g++ $(CFLAGS) -o gzipfiles gzipfiles.cpp $(PUBINCL) $(PUBCPP) -lm -lc
-	cp checkproc ../bin/.
+	cp gzipfiles ../bin/.
 
 clean:
-	rm -f procctl checkproc
+	rm -f procctl checkproc gzipfiles
