@@ -1,7 +1,7 @@
 #include "_public.h"
 
 void EXIT(int sig);
-
+// 这种程序还不好写心跳信息的超时时间，因为不同大小的文件压缩需要的时间完全不可一概而论
 int main(int argc, char *argv[])
 {
     // print help messages
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     // get file datetime
     char strTimeOut[21];
     LocalTime(strTimeOut, "yyyy-mm-dd hh24:mi:ss", 0 - (int)(atof(argv[3]) * 24 * 60 * 60));
-    
+
     // open dir
     CDir Dir;
     if (Dir.OpenDir(argv[1], argv[2], 10000, true) == false)
@@ -47,11 +47,14 @@ int main(int argc, char *argv[])
         if ((strcmp(Dir.m_ModifyTime, strTimeOut) < 0) && (MatchStr(Dir.m_FileName, "*.gz")) == false)
         {
             char strCmd[1024];
-            SNPRINTF(strCmd, sizeof(strCmd),1000,"/bin/gzip -f %s 1>/dev/null 2>/dev/null", Dir.m_FullFileName);
-            if (system(strCmd)==0){
-                printf("gzip %s ok.\n",Dir.m_FullFileName);
-            }else{
-                printf("gzip %s failed.\n",Dir.m_FullFileName);
+            SNPRINTF(strCmd, sizeof(strCmd), 1000, "/bin/gzip -f %s 1>/dev/null 2>/dev/null", Dir.m_FullFileName);
+            if (system(strCmd) == 0)
+            {
+                printf("gzip %s ok.\n", Dir.m_FullFileName);
+            }
+            else
+            {
+                printf("gzip %s failed.\n", Dir.m_FullFileName);
             }
         }
     }
