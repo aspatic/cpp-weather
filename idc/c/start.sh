@@ -2,7 +2,7 @@
 # 启动数据中心后台服务程序的脚本。
 ####################################################################
 
-# 检查服务程序是否超时。
+# 检查服务程序是否超时。这一条指令本应当设置为开机启动的
 #/home/yche/cpp-weather/tools/bin/procctl 30 /home/yche/cpp-weather/tools/bin/checkproc /tmp/log/checkproc.log
 
 # 压缩数据中心后台服务程序的备份日志。
